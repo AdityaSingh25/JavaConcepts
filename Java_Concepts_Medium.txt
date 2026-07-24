@@ -1,0 +1,268 @@
+Java Concepts — Quick Revision (Q&A)
+For developers who want to understand the basics clearly.
+
+
+---------------------------------------------------------
+JVM, JRE, JDK
+---------------------------------------------------------
+
+Q: What is the JVM?
+
+The JVM (Java Virtual Machine) is the engine that runs your Java program.
+
+When you write Java code, it first gets compiled into .class files (called bytecode). The JVM reads that bytecode and executes it on your machine.
+
+Flow: .java file → javac compiles it → .class file → JVM runs it → Output
+
+The JVM is what makes Java "write once, run anywhere." The same .class file runs on Windows, Mac, and Linux — as long as JVM is installed on that machine.
+
+
+Q: What is the JRE?
+
+JRE stands for Java Runtime Environment.
+
+JRE = JVM + Standard Library
+
+The JVM alone can execute bytecode, but it has nothing to work with. The Standard Library gives it things like String, ArrayList, System, Math, and thousands of other pre-built classes.
+
+Without JRE: JVM has no idea what "String" or "System.out.println" even means.
+With JRE: JVM has everything it needs to run your program.
+
+JRE is for running Java programs. End users install JRE. Developers need JDK.
+
+
+Q: What is the "Standard Library" that JRE gives us?
+
+It is a collection of thousands of pre-written Java classes that come bundled with Java. You use them every day without thinking about it.
+
+Examples:
+- java.lang gives you String, Math, System, Object
+- java.util gives you ArrayList, HashMap, List
+- java.io gives you tools for reading and writing files
+- java.net gives you tools for making HTTP requests
+- java.time gives you LocalDate, LocalDateTime
+- java.sql gives you tools for connecting to databases
+
+Without these, even a simple "Hello World" program would not work.
+
+
+Q: What is the JDK?
+
+JDK stands for Java Development Kit.
+
+JDK = JRE + javac (compiler) + other developer tools
+
+It has everything in JRE, plus javac — the compiler that turns your .java source code files into .class bytecode files.
+
+JDK is for developers. You need JDK to write and build Java programs.
+
+
+Q: Simple one-liner summary?
+
+JVM = the engine
+JRE = engine + fuel (standard library)
+JDK = engine + fuel + the factory that builds things (compiler)
+
+Or in terms of who needs what:
+- End users who just want to run a Java app → need JRE
+- Developers who write and build Java code → need JDK
+
+
+---------------------------------------------------------
+BUILD
+---------------------------------------------------------
+
+Q: What is a "Build"?
+
+Build simply means: run javac on all your .java files to produce .class files.
+
+When you click Build → Rebuild Project in IntelliJ, it does this:
+- javac Expense.java → Expense.class
+- javac DisallowRule.java → DisallowRule.class
+- ... for every .java file in your project
+
+That is it. Build = compile all source code.
+
+
+Q: What is the difference between Build and Run?
+
+Build: javac converts .java files into .class files. Done by JDK.
+Run: JVM executes the .class files. Done by JRE.
+
+Build produces files. Run executes them.
+
+
+---------------------------------------------------------
+MAVEN
+---------------------------------------------------------
+
+Q: If JDK has everything, why do we need Maven?
+
+JDK only has Java's own standard library. It does NOT come with:
+- Spring Boot
+- Hibernate
+- Lombok
+- Jackson (for JSON)
+- ... any third-party library
+
+If you want those, you have to download them yourself. That is Maven's job.
+
+
+Q: What did people do before Maven?
+
+They did it manually:
+1. Go to each library's website and download the .jar file
+2. That library needs 5 other jars → download those too
+3. Those 5 need 20 more → download all of them
+4. Add all 50+ jars to the project manually
+5. Next version releases → repeat everything from scratch
+
+This was painful and error-prone. Maven was created to solve this.
+
+
+Q: What does Maven do?
+
+You just tell Maven what you need in a file called pom.xml.
+
+For example, you say: "I need Spring Boot Web version 3.2.0"
+
+Maven then:
+- Downloads that jar automatically
+- Reads what that jar needs → downloads those too
+- Reads what those need → downloads those too
+- Manages all versions so nothing conflicts
+- Puts everything on your project classpath
+
+All 50+ jars, handled automatically.
+
+
+Q: What are Maven's main jobs?
+
+1. Dependency Manager — downloads jars from the internet automatically
+2. Transitive Dependencies — if library A needs B and C, Maven gets B and C too
+3. Build Orchestrator — tells JDK to compile your code in the right order
+4. Version Manager — keeps all library versions compatible with each other
+5. Packager — zips your .class files into a .jar file for deployment
+
+
+Q: Does Maven compile the code itself?
+
+No. Maven cannot compile Java code. It delegates to javac (the JDK compiler).
+
+When you run "mvn build":
+- Maven tells javac: "compile these .java files" → javac does the actual compiling
+- Maven tells JVM: "run the tests" → JVM actually runs them
+- Maven itself zips the .class files into a .jar → this part Maven does
+
+Think of it this way:
+Maven is the project manager.
+JDK (javac) is the worker who does the actual compiling.
+The manager tells the worker what to do. The worker does the real job.
+
+
+Q: Why does Spring Boot specifically need Maven?
+
+Spring Boot is not just one library — it is hundreds of libraries working together.
+
+For example, just adding "Spring Boot Web" pulls in:
+- spring-core
+- spring-webmvc
+- tomcat-embed (the built-in web server)
+- jackson-core, jackson-databind (for JSON)
+- ... and 30+ more jars
+
+Without Maven you would manage all of these manually. With Maven, you write 4 lines in pom.xml and Maven handles everything.
+
+Maven is to Java what npm is to JavaScript, or pip is to Python. Every language has a package manager. Maven is Java's.
+
+
+---------------------------------------------------------
+LOMBOK
+---------------------------------------------------------
+
+Q: What is Lombok?
+
+Lombok is a library that auto-generates boring boilerplate code — things like getters, setters, and constructors — so you do not have to write them yourself.
+
+Without Lombok, for every field in your class you write:
+
+  public String getId() { return id; }
+  public void setId(String id) { this.id = id; }
+  public String getName() { return name; }
+  public void setName(String name) { this.name = name; }
+  ... and so on for every field
+
+With Lombok, you just write @Data on the class and it generates all of that automatically.
+
+
+Q: When does Lombok run?
+
+Lombok runs during the Build step, not at runtime.
+
+When javac compiles your code, Lombok hooks in during that process. It reads your @Data or @Getter annotations, generates the getter/setter code on the fly, and javac compiles that generated code too. By the time the .class file is produced, the getters are already baked in.
+
+This is why Lombok needs to be compatible with your JDK version. It runs inside javac itself.
+
+
+Q: What is the difference between the Lombok IntelliJ Plugin and the Lombok JAR?
+
+Lombok IntelliJ Plugin:
+- An extension for the IntelliJ IDE
+- Makes IntelliJ understand Lombok so you do not get fake red error underlines
+- Lives in IntelliJ's plugins folder
+- Does NOT do any actual code generation
+
+Lombok JAR:
+- The actual library file added to your project
+- Does the real work: generates getters/setters at compile time
+- Lives in your project's dependencies
+
+You need both. The plugin is for a good IDE experience. The JAR is for actual compilation to work.
+
+
+Q: What version of Lombok works with which Java version?
+
+Java 8 to 11 → any Lombok 1.18.x works
+Java 17 → needs Lombok 1.18.24 or higher
+Java 21 → needs Lombok 1.18.30 or higher
+Java 24 → needs Lombok 1.18.38 or higher (1.18.46 recommended)
+
+Using an older Lombok with a newer Java version causes this error:
+  java.lang.ExceptionInInitializerError
+  com.sun.tools.javac.code.TypeTag UNKNOWN
+
+This happens because Lombok hooks into the internal compiler APIs of JDK. Those internal APIs change between Java versions, so older Lombok versions break.
+
+
+---------------------------------------------------------
+EVERYTHING TOGETHER — THE FULL FLOW
+---------------------------------------------------------
+
+Step 1: You write .java source code files
+
+Step 2: Maven reads your pom.xml and downloads all the libraries you need
+        (Spring Boot, Lombok, Jackson, etc.) from Maven Central
+
+Step 3: Maven tells javac (JDK) to compile your source code
+
+Step 4: During compilation, Lombok kicks in and generates getters/setters
+        for any class that has @Data or similar annotations
+
+Step 5: javac finishes compiling → produces .class files
+
+Step 6: Maven packages all the .class files into a single .jar file
+
+Step 7: JVM (inside JRE) runs the .jar file → your application is live
+
+
+---------------------------------------------------------
+QUICK CHEAT SHEET
+---------------------------------------------------------
+
+JVM     → executes .class files
+JRE     → JVM + standard library (String, ArrayList, etc.)
+JDK     → JRE + javac compiler + developer tools
+Build   → running javac to convert .java files into .class files
+Run     → JVM executing the .class files
+Maven   → downloads third-party libraries + orchestrates the build
+Lombok  → generates boilerplate code (getters/setters) during compilation
