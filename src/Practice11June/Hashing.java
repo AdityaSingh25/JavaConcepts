@@ -30,5 +30,4 @@ public class Hashing {
         System.out.println(hash[5]);
     }
 
-
 }
