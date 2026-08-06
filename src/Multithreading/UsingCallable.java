@@ -34,7 +34,7 @@ public class UsingCallable implements Callable<String> {
 
         try{
             // submit the callable tasks to the executor and get the future objects
-            Future<String> future1 = executor.submit(callable);
+            Future<String> future1 = executor.submit(callable); // here actual thread is made and start working on it(calls the call method)
             Future<String> future2 = executor.submit(callable2);
             Future<String> future3 = executor.submit(callable3);
 
