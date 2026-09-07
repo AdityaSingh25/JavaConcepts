@@ -20,7 +20,9 @@ public class GenericsExample {
 
     // wild card : when you don't know what the type is
 
-    public static void printList(List<? extends Object> myList){ // here you can't write List<Object>
+    public static void printList(List<? extends
+
+            Object> myList){ // here you can't write List<Object>
         System.out.println(myList);
     }
 
