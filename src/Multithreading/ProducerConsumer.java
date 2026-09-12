@@ -26,7 +26,7 @@ public class ProducerConsumer {
                 notifyAll();
             }
             // Sleep for a short time to simulate production time.
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         }
     }
 
@@ -34,7 +34,6 @@ public class ProducerConsumer {
         while(true){
             synchronized(this){
                 // wait till the buffer is empty
-
                 while(buffer.isEmpty()){
                     System.out.println("Consumer is waiting as the buffer is empty");
                     wait();
@@ -48,7 +47,7 @@ public class ProducerConsumer {
                 notifyAll();
             }
 
-            Thread.sleep(1500);
+            Thread.sleep(7000);
         }
     }
 
