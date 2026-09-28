@@ -91,6 +91,16 @@ public class BuildABTree {
             }
         }
 
+        public static int printNumberOfNodes(Node root){
+            if(root == null){
+                return 0;
+            }
+
+            int lstNodes = printNumberOfNodes(root.left);
+            int rstNodes = printNumberOfNodes(root.right);
+            return lstNodes + rstNodes +1;
+        }
+
         public static void main(String args[]) {
             int[] nodes = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
 
@@ -108,6 +118,8 @@ public class BuildABTree {
             System.out.println("Level order is : ");
             BinaryTree.levelOrder(root);
 
+            System.out.println("no. of nodes : ");
+            System.out.print(BinaryTree.printNumberOfNodes(root));
         }
     }
 }
